@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday Muskii! 🎂✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #140507;
+      --bg-radial: radial-gradient(circle at center, #380d14 0%, #140507 75%, #090203 100%);
+      --gold: #ffd166;
+      --pink: #ff6b9d;
+      --soft-pink: #ffb3c6;
+      --glass-border: rgba(255, 255, 255, 0.14);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-radial);
+      background-color: var(--bg-dark);
+      color: #fff;
+      min-height: 100dvh;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Ambient Floating Bokeh Particles */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bokeh {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.85) 0%, rgba(255, 133, 82, 0) 70%);
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) scale(0.6); opacity: 0; }
+      20% { opacity: 0.7; }
+      80% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    /* Top-Right Music Toggle Button */
+    .music-toggle {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 50;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(28, 9, 14, 0.82);
+      border: 1px solid rgba(255, 209, 102, 0.45);
+      color: #ffe5ec;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .music-toggle:hover {
+      transform: scale(1.04);
+      border-color: var(--gold);
+    }
+
+    .music-toggle.muted {
+      opacity: 0.72;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Stage Container */
+    .stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(56px, 9vh, 76px) clamp(16px, 5vw, 32px) clamp(24px, 5vh, 40px);
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      overflow-y: auto;
+    }
+
+    .stage.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    h1 {
+      font-size: clamp(1.35rem, 4.5vw, 2.3rem);
+      font-weight: 700;
+      color: #ffe5ec;
+      text-shadow: 0 0 18px rgba(255, 107, 157, 0.4);
+      margin-bottom: 6px;
+      max-width: 640px;
+      line-height: 1.25;
+    }
+
+    p.subtitle {
+      font-size: clamp(0.8rem, 2.5vw, 0.92rem);
+      color: #d8b4be;
+      margin-bottom: clamp(14px, 3vh, 24px);
+      max-width: 460px;
+      line-height: 1.4;
+    }
+
+    /* Buttons */
+    .btn {
+      background: linear-gradient(135deg, #ff758f, #ff4d6d);
+      color: #fff;
+      border: none;
+      padding: clamp(10px, 2vh, 13px) clamp(22px, 5vw, 28px);
+      border-radius: 30px;
+      font-size: clamp(0.88rem, 2.6vw, 0.98rem);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: clamp(12px, 2.5vh, 18px);
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(255, 77, 109, 0.65);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ---------------- STAGE 1: GIFT BOX ---------------- */
+    .gift-wrapper {
+      position: relative;
+      cursor: pointer;
+      margin: clamp(16px, 4vh, 28px) 0;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .gift-wrapper:hover {
+      transform: scale(1.06) rotate(-2deg);
+    }
+
+    .gift-box {
+      width: clamp(110px, 28vw, 134px);
+      height: clamp(92px, 23vw, 112px);
+      background: linear-gradient(145deg, #d63384, #9d174d);
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(214, 51, 132, 0.45);
+      display: flex;
+      justify-content: center;
+    }
+
+    .gift-box::before {
+      content: '';
+      width: 22px;
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .gift-lid {
+      width: calc(100% + 16px);
+      height: 30px;
+      background: linear-gradient(145deg, #ec4899, #be185d);
+      border-radius: 8px;
+      position: absolute;
+      top: -20px;
+      left: -8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      justify-content: center;
+    }
+
+    .gift-lid::before {
+      content: '';
+      width: 22px;
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .gift-bow {
+      position: absolute;
+      top: -24px;
+      font-size: 2rem;
+    }
+
+    .gift-wrapper.opened .gift-lid {
+      transform: translateY(-55px) rotate(-18deg);
+    }
+
+    /* ---------------- STAGE 2: PHONE LOCKSCREEN ---------------- */
+    .phone-card {
+      background: rgba(25, 10, 14, 0.88);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: clamp(18px, 3.5vh, 28px) clamp(16px, 4vw, 24px);
+      width: min(92vw, 310px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      flex-shrink: 0;
+    }
+
+    .clock {
+      font-size: clamp(2rem, 6vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+
+    .date-text {
+      font-size: 0.75rem;
+      color: #c9a0ab;
+      margin-bottom: 10px;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 12px 0 16px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 1.5px solid var(--soft-pink);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .dot.filled {
+      background: var(--pink);
+      transform: scale(1.15);
+    }
+
+    .dots.shake {
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(8px, 2vh, 12px);
+      justify-items: center;
+    }
+
+    .key {
+      width: clamp(50px, 14vw, 58px);
+      height: clamp(50px, 14vw, 58px);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: clamp(1.1rem, 3.5vw, 1.25rem);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .key:active {
+      background: rgba(255, 107, 157, 0.45);
+      transform: scale(0.92);
+    }
+
+    /* ---------------- STAGE 3: RED THEATRE CURTAINS ---------------- */
+    #stage-curtain {
+      padding: 0;
+      z-index: 10;
+    }
+
+    .curtain-panel {
+      position: fixed;
+      top: 0;
+      width: 50vw;
+      height: 100dvh;
+      background: repeating-linear-gradient(
+        90deg,
+        #59000b 0px,
+        #9e0014 22px,
+        #420008 44px
+      );
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.75);
+      transition: transform 1.4s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 11;
+    }
+
+    .curtain-left { left: 0; }
+    .curtain-right { right: 0; }
+
+    #stage-curtain.open .curtain-left { transform: translateX(-100%); }
+    #stage-curtain.open .curtain-right { transform: translateX(100%); }
+
+    .curtain-btn {
+      z-index: 12;
+      background: rgba(20, 5, 7, 0.88);
+      border: 1.5px solid var(--gold);
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.4);
+      transition: opacity 0.4s, transform 0.2s;
+    }
+
+    .curtain-btn:hover { transform: scale(1.06); }
+    #stage-curtain.open .curtain-btn { opacity: 0; pointer-events: none; }
+
+    /* ---------------- STAGE 4: INTRO CARD ---------------- */
+    .bear-badge {
+      width: clamp(58px, 16vw, 70px);
+      height: clamp(58px, 16vw, 70px);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--soft-pink);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: clamp(1.8rem, 5vw, 2.2rem);
+      margin-bottom: 14px;
+      box-shadow: 0 0 25px rgba(255, 107, 157, 0.35);
+      flex-shrink: 0;
+    }
+
+    /* ---------------- STAGE 5: BIRTHDAY CAKE & LIVE COUNTER ---------------- */
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(110px, 1fr));
+      gap: clamp(8px, 2vh, 14px) clamp(16px, 5vw, 32px);
+      margin: 8px 0 clamp(14px, 3vh, 22px);
+      width: min(92vw, 380px);
+      flex-shrink: 0;
+    }
+
+    .counter-box span.num {
+      display: block;
+      font-size: clamp(1.25rem, 4.5vw, 2rem);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.15;
+    }
+
+    .counter-box span.label {
+      font-size: 0.68rem;
+      letter-spacing: 1.4px;
+      color: #c9a0ab;
+    }
+
+    .cake-container {
+      position: relative;
+      margin: clamp(18px, 3vh, 26px) 0 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .cake {
+      width: clamp(145px, 40vw, 175px);
+      height: clamp(72px, 18vw, 86px);
+      background: linear-gradient(180deg, #ff8fab 0%, #fb6f92 100%);
+      border-radius: 14px 14px 6px 6px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(251, 111, 146, 0.4);
+    }
+
+    .cake::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: #fff0f3;
+      border-radius: 14px 14px 10px 10px;
+    }
+
+    .cake-plate {
+      width: calc(100% + 36px);
+      margin-left: -18px;
+      height: 10px;
+      background: #e5e5e5;
+      border-radius: 10px;
+    }
+
+    .candles {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      position: absolute;
+      top: -30px;
+      width: 100%;
+    }
+
+    .candle {
+      width: 8px;
+      height: 30px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 4px, #ff4d6d 4px, #ff4d6d 8px);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .flame {
+      width: 12px;
+      height: 18px;
+      background: radial-gradient(circle, #fff 10%, #ffd166 50%, #ff7b00 90%);
+      border-radius: 50% 50% 35% 35%;
+      position: absolute;
+      top: -19px;
+      left: -2px;
+      box-shadow: 0 0 14px #ffd166;
+      animation: flicker 0.25s infinite alternate;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .flame.out {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    @keyframes flicker {
+      from { transform: scale(1) rotate(-2deg); }
+      to { transform: scale(1.08) rotate(2deg); }
+    }
+
+    /* ---------------- STAGE 7: POP THE WISHES BALLOONS ---------------- */
+    .balloons-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(12px, 3.5vw, 20px);
+      max-width: min(92vw, 340px);
+      margin: 10px 0 14px;
+      min-height: 130px;
+      flex-shrink: 0;
+    }
+
+    .balloon {
+      width: clamp(54px, 15vw, 64px);
+      height: clamp(66px, 18vw, 78px);
+      border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+      cursor: pointer;
+      position: relative;
+      animation: bob 2.4s ease-in-out infinite alternate;
+      box-shadow: inset -6px -8px 14px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      width: 1.5px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .balloon.popped {
+      transform: scale(1.5);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes bob {
+      from { transform: translateY(0); }
+      to { transform: translateY(-9px); }
+    }
+
+    .wish-banner {
+      min-height: 38px;
+      font-size: clamp(0.92rem, 3vw, 1.08rem);
+      font-weight: 600;
+      color: var(--gold);
+      margin-top: 6px;
+      padding: 0 10px;
+      max-width: 420px;
+    }
+
+    /* ---------------- STAGE 8: SCRATCH CARD ---------------- */
+    .scratch-box {
+      position: relative;
+      width: min(88vw, 300px);
+      height: 170px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 209, 102, 0.4);
+      margin: 12px 0;
+      flex-shrink: 0;
+    }
+
+    .scratch-secret {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #4a1525, #2b0914);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .scratch-secret h3 {
+      color: var(--gold);
+      font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+      margin-bottom: 6px;
+    }
+
+    .scratch-secret p {
+      font-size: clamp(0.78rem, 2.5vw, 0.86rem);
+      color: #ffe5ec;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* ---------------- STAGE 9: ENVELOPE & TYPING LETTER ---------------- */
+    .envelope {
+      width: clamp(200px, 62vw, 244px);
+      height: clamp(128px, 38vw, 154px);
+      background: #f4d58d;
+      border-radius: 8px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .envelope:hover { transform: scale(1.04); }
+
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 56%;
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      background: #e0be6f;
+    }
+
+    .wax-seal {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #c9184a;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .letter-paper {
+      display: none;
+      width: min(94vw, 480px);
+      max-height: 68dvh;
+      overflow-y: auto;
+      background: rgba(32, 12, 18, 0.92);
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 16px;
+      padding: clamp(18px, 4vw, 26px) clamp(16px, 4vw, 24px);
+      text-align: left;
+      font-family: 'Caveat', cursive;
+      font-size: clamp(1.25rem, 4.2vw, 1.5rem);
+      line-height: 1.55;
+      color: #fff0f3;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+    }
+
+    .letter-paper.visible { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Top-Right Music Button -->
+  <button id="music-toggle" class="music-toggle" onclick="toggleMusic(event)" aria-label="Toggle background song">
+    <span id="music-icon">🎵</span>
+    <span id="music-label">Song: On</span>
+  </button>
+
+  <!-- Optional Custom MP3 Audio Element (if you add an MP3 file in CONFIG.musicUrl) -->
+  <audio id="bg-audio" loop preload="auto"></audio>
+
+  <!-- Floating Particles -->
+  <div id="particles"></div>
+
+  <!-- STAGE 1: GIFT BOX -->
+  <section id="stage-1" class="stage active">
+    <h1>Ek Chota sa surprise aapka waits kar raha hai... ✨</h1>
+    <p class="subtitle">✨ Something special for you ✨</p>
+    <div class="gift-wrapper" id="gift-box" onclick="openGift()">
+      <div class="gift-lid"><span class="gift-bow">🎀</span></div>
+      <div class="gift-box"></div>
+    </div>
+    <p class="subtitle">Tap the gift to open 🎁</p>
+  </section>
+
+  <!-- STAGE 2: PASSCODE LOCKSCREEN -->
+  <section id="stage-2" class="stage">
+    <div class="phone-card">
+      <div class="clock" id="live-clock">02:44</div>
+      <div class="date-text">Birthday Surprise ✨</div>
+      <div style="font-size: 1.25rem; margin-bottom: 4px;">🔒</div>
+      <p style="font-size: 0.78rem; color: #ffb3c6;">Enter the secret code ✨</p>
+
+      <div class="dots" id="pin-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="keypad">
+        <button class="key" onclick="pressKey('1')">1</button>
+        <button class="key" onclick="pressKey('2')">2</button>
+        <button class="key" onclick="pressKey('3')">3</button>
+        <button class="key" onclick="pressKey('4')">4</button>
+        <button class="key" onclick="pressKey('5')">5</button>
+        <button class="key" onclick="pressKey('6')">6</button>
+        <button class="key" onclick="pressKey('7')">7</button>
+        <button class="key" onclick="pressKey('8')">8</button>
+        <button class="key" onclick="pressKey('9')">9</button>
+        <div></div>
+        <button class="key" onclick="pressKey('0')">0</button>
+        <button class="key" onclick="clearPin()">⌫</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3: RED CURTAIN REVEAL -->
+  <section id="stage-curtain" class="stage">
+    <div class="curtain-panel curtain-left"></div>
+    <div class="curtain-panel curtain-right"></div>
+    <button class="curtain-btn" onclick="openCurtains()">✨ Open ✨</button>
+  </section>
+
+  <!-- STAGE 4: INTRO MESSAGE -->
+  <section id="stage-4" class="stage">
+    <div class="bear-badge">🧸</div>
+    <h1>There's something special I want to tell you...</h1>
+    <p class="subtitle">Before anything else, Mene Aapke Liye ek Special Gift Bnaya hai,</p>
+    <button class="btn" onclick="playSfx('click'); goToStage('stage-5')">Continue ✨</button>
+  </section>
+
+  <!-- STAGE 5: BIRTHDAY CAKE & LIVE AGE COUNTER -->
+  <section id="stage-5" class="stage">
+    <h1 id="hero-title">Happy Birthday Muskii🎂</h1>
+    <p class="subtitle">✨ The World Has Been Better Since ✨</p>
+
+    <div class="counter-grid">
+      <div class="counter-box"><span class="num" id="cnt-years">20</span><span class="label">YEARS</span></div>
+      <div class="counter-box"><span class="num" id="cnt-days">7,304</span><span class="label">DAYS</span></div>
+      <div class="counter-box"><span class="num" id="cnt-hours">175,314</span><span class="label">HOURS</span></div>
+      <div class="counter-box"><span class="num" id="cnt-mins">10,518,870</span><span class="label">MINUTES</span></div>
+    </div>
+
+    <div class="cake-container" onclick="blowCandles()">
+      <div class="candles">
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+      </div>
+      <div class="cake"></div>
+      <div class="cake-plate"></div>
+    </div>
+    <p class="subtitle" id="candle-hint" style="margin-top: 8px; margin-bottom: 6px;">🕯️ Blow out your candles (tap cake)</p>
+
+    <!-- Directly skips Cute Memories -> goes to Pop the Wishes -->
+    <button class="btn" onclick="playSfx('click'); goToStage('stage-7')">Next Surprise 🎁</button>
+  </section>
+
+  <!-- STAGE 7: POP THE WISHES (SKIPS PUZZLE -> GOES TO SCRATCH CARD) -->
+  <section id="stage-7" class="stage">
+    <h1>Pop the Wishes 🎈</h1>
+    <p class="subtitle">Tap each balloon to reveal a little wish</p>
+
+    <div class="balloons-wrap" id="balloons-container"></div>
+    <div class="wish-banner" id="wish-text"></div>
+    <p class="subtitle" id="pop-counter" style="margin-bottom: 6px;">Popped 0/5</p>
+
+    <!-- Directly skips Birthday Puzzle -> goes to Scratch Card -->
+    <button class="btn" id="balloon-next-btn" style="display: none;" onclick="playSfx('click'); initScratchCard(); goToStage('stage-8');">
+      Continue ✨
+    </button>
+  </section>
+
+  <!-- STAGE 8: ONE LAST SURPRISE (SCRATCH CARD) -->
+  <section id="stage-8" class="stage">
+    <h1>One Last Surprise ✨</h1>
+    <p class="subtitle">Scratch the golden card to reveal it</p>
+
+    <div class="scratch-box">
+      <div class="scratch-secret">
+        <h3>Happy Birthday Bestie! 🎉</h3>
+        <p>You deserve the happiest year ahead — endless laughs, big wins, and all the love! 💖</p>
+      </div>
+      <canvas id="scratch-canvas" width="300" height="170"></canvas>
+    </div>
+
+    <button class="btn" id="read-letter-btn" style="display: none;" onclick="playSfx('click'); goToStage('stage-9')">
+      Read My Letter 💌
+    </button>
+  </section>
+
+  <!-- STAGE 9: FINAL LETTER -->
+  <section id="stage-9" class="stage">
+    <h1>A Letter Just For You 💌</h1>
+
+    <div id="envelope-wrap" onclick="openLetter()">
+      <div class="envelope">
+        <div class="wax-seal">❤️</div>
+      </div>
+      <p class="subtitle" style="margin-top: 14px;">Tap to open 💌</p>
+    </div>
+
+    <div class="letter-paper" id="letter-paper">
+      <div id="typed-letter"></div>
+    </div>
+  </section>
+
+  <script>
+    /* ============================================================
+       CUSTOMIZE YOUR BESTIE'S DETAILS RIGHT HERE!
+       ============================================================ */
+    const CONFIG = {
+      bestieName: "Bestie",                 // Change to her name or nickname
+      secretPin: "2311",                    // 4-digit passcode
+      birthDate: "2006-11-23T00:00:00",     // YYYY-MM-DDTHH:MM:SS for live age counter
+      musicUrl: "music.mp3",                         // Optional: put e.g. "birthday-song.mp3" in same folder; leave "" for built-in melody
+      balloonWishes: [
+        "You deserve the entire universe ✨",
+        "You are my favorite person, always 💖",
+        "Life is 100x better with you around 🌟",
+        "I am the luckiest to have a bestie like you 🥂",
+        "You make my whole world brighter ☀️"
+      ],
+      letterText: `My dearest Bestie,\n\nAaj is special day pe,Mein aapko batana chahta hu ke aap mere liye kitni special ho. Aapki Jesi bestie mere liye Allah Pak ki taraf se boht hi piyara gift hai.\n\nAapke hone se mera ordinary din bh special hojata hai.Mere liye is poori duniya mein aapki khushi hi sab se ziyada keemti hai,\n\nHappy Birthday, my bestie. Aap duniya ki har khushi deserve karti hain Today and always.\n\nForever grateful for you ❤️\n\n Once Again Wishing you a very Happiest Birthday! 🎉🎂\n\nWith all my love,\nFawaad Hussain`
+    };
+
+    /* ============================================================
+       WEB AUDIO: BACKGROUND SONG + EVENT SOUND EFFECTS
+       ============================================================ */
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+    let musicEnabled = true;     // Default ON as requested
+    let melodyTimer = null;
+    let melodyStep = 0;
+
+    // Gentle Happy Birthday / warm music-box note sequence (Hz)
+    const MELODY_NOTES = [
+      392.00, 392.00, 440.00, 392.00, 523.25, 493.88,
+      392.00, 392.00, 440.00, 392.00, 587.33, 523.25,
+      392.00, 392.00, 783.99, 659.25, 523.25, 493.88, 440.00,
+      698.46, 698.46, 659.25, 523.25, 587.33, 523.25
+    ];
+
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new AudioCtx();
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function updateMusicButtonUI() {
+      const btn = document.getElementById("music-toggle");
+      const icon = document.getElementById("music-icon");
+      const label = document.getElementById("music-label");
+      if (musicEnabled) {
+        btn.classList.remove("muted");
+        icon.textContent = "🎵";
+        label.textContent = "Song: On";
+      } else {
+        btn.classList.add("muted");
+        icon.textContent = "🔇";
+        label.textContent = "Song: Off";
+      }
+    }
+
+    function playMelodyNote() {
+      if (!musicEnabled) return;
+      const ctx = ensureAudioContext();
+      if (ctx.state !== "running") return;
+
+      const freq = MELODY_NOTES[melodyStep % MELODY_NOTES.length];
+      melodyStep++;
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.48);
+    }
+
+    function startBackgroundMusic() {
+      if (!musicEnabled) return;
+
+      const audioEl = document.getElementById("bg-audio");
+      if (CONFIG.musicUrl) {
+        if (!audioEl.src) audioEl.src = CONFIG.musicUrl;
+        audioEl.play().catch(() => {});
+        return;
+      }
+
+      ensureAudioContext();
+      if (!melodyTimer) {
+        playMelodyNote();
+        melodyTimer = setInterval(playMelodyNote, 520);
+      }
+    }
+
+    function stopBackgroundMusic() {
+      const audioEl = document.getElementById("bg-audio");
+      audioEl.pause();
+      if (melodyTimer) {
+        clearInterval(melodyTimer);
+        melodyTimer = null;
+      }
+    }
+
+    function toggleMusic(event) {
+      event.stopPropagation();
+      musicEnabled = !musicEnabled;
+      updateMusicButtonUI();
+      if (musicEnabled) {
+        startBackgroundMusic();
+        playSfx("click");
+      } else {
+        stopBackgroundMusic();
+      }
+    }
+
+    // Auto-start song as soon as the user first touches/clicks anywhere
+    document.addEventListener("pointerdown", function firstGestureStart() {
+      if (musicEnabled) {
+        startBackgroundMusic();
+      }
+      document.removeEventListener("pointerdown", firstGestureStart);
+    }, { once: true });
+
+    // Small sound effects for interactive events
+    function playSfx(type) {
+      if (!musicEnabled) return;
+      const ctx = ensureAudioContext();
+      if (ctx.state !== "running") return;
+      const now = ctx.currentTime;
+
+      const tone = (freq, startOffset, duration, wave = "sine", vol = 0.08) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = wave;
+        osc.frequency.setValueAtTime(freq, now + startOffset);
+        gain.gain.setValueAtTime(0.001, now + startOffset);
+        gain.gain.exponentialRampToValueAtTime(vol, now + startOffset + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0008, now + startOffset + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + startOffset);
+        osc.stop(now + startOffset + duration + 0.02);
+      };
+
+      if (type === "gift") {
+        tone(523.25, 0, 0.18, "triangle", 0.1);
+        tone(659.25, 0.09, 0.2, "triangle", 0.1);
+        tone(783.99, 0.18, 0.35, "triangle", 0.11);
+      } else if (type === "key") {
+        tone(620, 0, 0.07, "sine", 0.05);
+      } else if (type === "unlock") {
+        tone(587.33, 0, 0.14, "triangle", 0.09);
+        tone(880, 0.11, 0.28, "triangle", 0.1);
+      } else if (type === "error") {
+        tone(220, 0, 0.14, "sawtooth", 0.06);
+        tone(175, 0.12, 0.18, "sawtooth", 0.06);
+      } else if (type === "curtain") {
+        tone(330, 0, 0.25, "triangle", 0.08);
+        tone(440, 0.12, 0.35, "triangle", 0.08);
+      } else if (type === "blow") {
+        // Soft whoosh + celebratory chime
+        const bufferSize = ctx.sampleRate * 0.25;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = noiseBuffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(900, now);
+        const nGain = ctx.createGain();
+        nGain.gain.setValueAtTime(0.08, now);
+        nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        noise.connect(filter);
+        filter.connect(nGain);
+        nGain.connect(ctx.destination);
+        noise.start(now);
+
+        tone(659.25, 0.14, 0.25, "triangle", 0.09);
+        tone(880, 0.24, 0.35, "triangle", 0.1);
+      } else if (type === "pop") {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(840, now + 0.09);
+        gain.gain.setValueAtTime(0.11, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.11);
+      } else if (type === "scratchReveal") {
+        tone(523.25, 0, 0.15, "triangle", 0.09);
+        tone(659.25, 0.08, 0.15, "triangle", 0.09);
+        tone(783.99, 0.16, 0.15, "triangle", 0.09);
+        tone(1046.5, 0.24, 0.35, "triangle", 0.1);
+      } else if (type === "letter") {
+        tone(493.88, 0, 0.16, "sine", 0.08);
+        tone(659.25, 0.1, 0.28, "sine", 0.09);
+      } else {
+        tone(540, 0, 0.08, "sine", 0.06);
+      }
+    }
+
+    /* ============================================================
+       INITIALIZATION & AMBIENT PARTICLES
+       ============================================================ */
+    document.getElementById("hero-title").textContent = `Happy Birthday ${CONFIG.bestieName} 🎂`;
+    updateMusicButtonUI();
+
+    const particleContainer = document.getElementById("particles");
+    for (let i = 0; i < 24; i++) {
+      const b = document.createElement("div");
+      b.className = "bokeh";
+      const size = Math.random() * 14 + 6;
+      b.style.width = `${size}px`;
+      b.style.height = `${size}px`;
+      b.style.left = `${Math.random() * 100}vw`;
+      b.style.animationDuration = `${Math.random() * 8 + 6}s`;
+      b.style.animationDelay = `${Math.random() * 6}s`;
+      particleContainer.appendChild(b);
+    }
+
+    function goToStage(id) {
+      document.querySelectorAll(".stage").forEach(s => s.classList.remove("active"));
+      const target = document.getElementById(id);
+      target.classList.add("active");
+      target.scrollTop = 0;
+    }
+
+    /* ============================================================
+       STAGE 1: GIFT BOX
+       ============================================================ */
+    function openGift() {
+      startBackgroundMusic();
+      playSfx("gift");
+      document.getElementById("gift-box").classList.add("opened");
+      confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+      setTimeout(() => goToStage("stage-2"), 900);
+    }
+
+    /* ============================================================
+       STAGE 2: PASSCODE
+       ============================================================ */
+    let enteredPin = "";
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("live-clock").textContent = now.toTimeString().slice(0, 5);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function pressKey(num) {
+      if (enteredPin.length >= 4) return;
+      playSfx("key");
+      enteredPin += num;
+      renderDots();
+
+      if (enteredPin.length === 4) {
+        if (enteredPin === CONFIG.secretPin) {
+          playSfx("unlock");
+          setTimeout(() => goToStage("stage-curtain"), 300);
+        } else {
+          playSfx("error");
+          const dotsEl = document.getElementById("pin-dots");
+          dotsEl.classList.add("shake");
+          setTimeout(() => {
+            dotsEl.classList.remove("shake");
+            enteredPin = "";
+            renderDots();
+          }, 400);
+        }
+      }
+    }
+
+    function clearPin() {
+      playSfx("key");
+      enteredPin = enteredPin.slice(0, -1);
+      renderDots();
+    }
+
+    function renderDots() {
+      const dots = document.querySelectorAll("#pin-dots .dot");
+      dots.forEach((d, idx) => {
+        d.classList.toggle("filled", idx < enteredPin.length);
+      });
+    }
+
+    /* ============================================================
+       STAGE 3: CURTAINS
+       ============================================================ */
+    function openCurtains() {
+      playSfx("curtain");
+      const curtainStage = document.getElementById("stage-curtain");
+      curtainStage.classList.add("open");
+      setTimeout(() => {
+        goToStage("stage-4");
+      }, 1300);
+    }
+
+    /* ============================================================
+       STAGE 5: LIVE COUNTER & CAKE CANDLES
+       ============================================================ */
+    function updateAgeCounter() {
+      const birth = new Date(CONFIG.birthDate);
+      const now = new Date();
+      const diffMs = Math.max(0, now - birth);
+
+      const mins = Math.floor(diffMs / 60000);
+      const hours = Math.floor(mins / 60);
+      const days = Math.floor(hours / 24);
+      const years = Math.floor(days / 365.25);
+
+      document.getElementById("cnt-years").textContent = years.toLocaleString();
+      document.getElementById("cnt-days").textContent = days.toLocaleString();
+      document.getElementById("cnt-hours").textContent = hours.toLocaleString();
+      document.getElementById("cnt-mins").textContent = mins.toLocaleString();
+    }
+    setInterval(updateAgeCounter, 1000);
+    updateAgeCounter();
+
+    let candlesBlown = false;
+    function blowCandles() {
+      if (candlesBlown) return;
+      candlesBlown = true;
+      playSfx("blow");
+      document.querySelectorAll(".flame").forEach(f => f.classList.add("out"));
+      document.getElementById("candle-hint").textContent = "🎉 Wish made! Happy Birthday! 🎉";
+      confetti({ particleCount: 110, spread: 90, origin: { y: 0.65 } });
+    }
+
+    /* ============================================================
+       STAGE 7: POP THE WISHES BALLOONS
+       ============================================================ */
+    const balloonColors = ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#ff70a6"];
+    const balloonsContainer = document.getElementById("balloons-container");
+    let poppedCount = 0;
+
+    CONFIG.balloonWishes.forEach((wish, idx) => {
+      const b = document.createElement("div");
+      b.className = "balloon";
+      b.style.background = balloonColors[idx % balloonColors.length];
+      b.style.animationDelay = `${idx * 0.25}s`;
+      b.onclick = () => {
+        if (b.classList.contains("popped")) return;
+        playSfx("pop");
+        b.classList.add("popped");
+        poppedCount++;
+        document.getElementById("wish-text").textContent = wish;
+        document.getElementById("pop-counter").textContent = `Popped ${poppedCount}/${CONFIG.balloonWishes.length}`;
+        confetti({ particleCount: 25, spread: 50, origin: { y: 0.5 } });
+
+        if (poppedCount === CONFIG.balloonWishes.length) {
+          document.getElementById("balloon-next-btn").style.display = "inline-block";
+        }
+      };
+      balloonsContainer.appendChild(b);
+    });
+
+    /* ============================================================
+       STAGE 8: SCRATCH CARD
+       ============================================================ */
+    let scratchInitialized = false;
+    function initScratchCard() {
+      if (scratchInitialized) return;
+      scratchInitialized = true;
+
+      const canvas = document.getElementById("scratch-canvas");
+      const ctx = canvas.getContext("2d");
+
+      const grad = ctx.createLinearGradient(0, 0, 300, 170);
+      grad.addColorStop(0, "#d97706");
+      grad.addColorStop(0.5, "#fbbf24");
+      grad.addColorStop(1, "#f43f5e");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 300, 170);
+
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 18px Poppins, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Scratch here 🎁", 150, 82);
+      ctx.font = "12px Poppins, sans-serif";
+      ctx.fillText("Use your finger or mouse", 150, 105);
+
+      let isDrawing = false;
+      let revealed = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+          x: (clientX - rect.left) * scaleX,
+          y: (clientY - rect.top) * scaleY
+        };
+      }
+
+      function scratch(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 24, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (!revealed) {
+          revealed = true;
+          playSfx("scratchReveal");
+          setTimeout(() => {
+            document.getElementById("read-letter-btn").style.display = "inline-block";
+            confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+          }, 1100);
+        }
+      }
+
+      canvas.addEventListener("mousedown", () => (isDrawing = true));
+      window.addEventListener("mouseup", () => (isDrawing = false));
+      canvas.addEventListener("mousemove", scratch);
+
+      canvas.addEventListener("touchstart", () => (isDrawing = true), { passive: false });
+      window.addEventListener("touchend", () => (isDrawing = false));
+      canvas.addEventListener("touchmove", scratch, { passive: false });
+    }
+
+    /* ============================================================
+       STAGE 9: ENVELOPE & TYPEWRITER LETTER
+       ============================================================ */
+    function openLetter() {
+      playSfx("letter");
+      document.getElementById("envelope-wrap").style.display = "none";
+      const paper = document.getElementById("letter-paper");
+      paper.classList.add("visible");
+
+      const target = document.getElementById("typed-letter");
+      let i = 0;
+      const text = CONFIG.letterText;
+
+      function typeChar() {
+        if (i < text.length) {
+          target.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+          i++;
+          paper.scrollTop = paper.scrollHeight;
+          setTimeout(typeChar, 28);
+        }
+      }
+      typeChar();
+    }
+  </script>
+</body>
+</html>
